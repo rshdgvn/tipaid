@@ -4,6 +4,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 from .Views.user_views import registerUser, MyTokenObtainPairView, test
+from .Views.generate_views import generate_recommendation
 
 
 urlpatterns = [
@@ -11,6 +12,7 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('register/', registerUser, name='register_user'),
     path('test/', test, name='test'),
+    path('generate/', generate_recommendation)
     
     
 ]
