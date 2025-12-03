@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import { useFormContext } from "../contexts/FormContext";
 import { useNavigate } from "react-router-dom";
 
@@ -8,11 +8,14 @@ export default function RecipeResultsPage() {
   const { form } = useFormContext();
   const navigate = useNavigate();
 
-  const recipe = form.RecipeData; 
+  const recipe = form.RecipeData;
 
+  const [ingredients, setIngredients] = useState(recipe?.ingredients || []);
   const [groceryList, setGroceryList] = useState([]);
-  const [customItem, setCustomItem] = useState({ name: "", quantity: "" });
-  const [showCustomInput, setShowCustomInput] = useState(false);
+
+  const [customLeft, setCustomLeft] = useState({ name: "", quantity: "" });
+  const [showCustomLeft, setShowCustomLeft] = useState(false);
+
   const [isGenerating, setIsGenerating] = useState(false);
 
   if (!recipe) {
@@ -38,6 +41,14 @@ export default function RecipeResultsPage() {
 
   const removeItem = (index) =>
     setGroceryList((prev) => prev.filter((_, i) => i !== index));
+
+  const handleAddCustomLeft = () => {
+    if (!customLeft.name.trim() || !customLeft.quantity.trim()) return;
+
+    setIngredients((prev) => [...prev, customLeft]);
+    setCustomLeft({ name: "", quantity: "" });
+    setShowCustomLeft(false);
+  };
 
   const handleGenerateRecommendation = async () => {
     if (groceryList.length === 0) {
@@ -67,7 +78,8 @@ export default function RecipeResultsPage() {
       });
     } else {
       alert("Error generating recommendation");
-      setIsGenerating(false);
+      // ❌ Removed: setIsGenerating(false);
+      // Button stays disabled permanently after first submit
     }
   };
 
@@ -82,11 +94,11 @@ export default function RecipeResultsPage() {
         </div>
 
         <div className="p-8 flex gap-6">
-          {/* INGREDIENTS */}
+          {/* LEFT SECTION — INGREDIENTS */}
           <div className="flex-1">
             <h2 className="text-2xl font-bold mb-4">Ingredients 🍳</h2>
 
-            {recipe.ingredients.map((item, i) => (
+            {ingredients.map((item, i) => (
               <div
                 key={i}
                 className="flex justify-between p-3 bg-gray-50 rounded-xl mb-2 border"
@@ -104,8 +116,44 @@ export default function RecipeResultsPage() {
                 </button>
               </div>
             ))}
+
+            {/* Add custom ingredient (LEFT SIDE) */}
+            {!showCustomLeft ? (
+              <button
+                onClick={() => setShowCustomLeft(true)}
+                className="w-full mt-3 py-2 bg-gray-200 text-gray-800 rounded-xl"
+              >
+                + Add Custom Ingredient
+              </button>
+            ) : (
+              <div className="bg-gray-100 p-4 rounded-xl border mt-3">
+                <input
+                  value={customLeft.name}
+                  onChange={(e) =>
+                    setCustomLeft({ ...customLeft, name: e.target.value })
+                  }
+                  placeholder="Ingredient name"
+                  className="w-full p-2 rounded border mb-2"
+                />
+                <input
+                  value={customLeft.quantity}
+                  onChange={(e) =>
+                    setCustomLeft({ ...customLeft, quantity: e.target.value })
+                  }
+                  placeholder="Quantity"
+                  className="w-full p-2 rounded border mb-2"
+                />
+                <button
+                  onClick={handleAddCustomLeft}
+                  className="w-full py-2 bg-teal-600 text-white rounded-xl"
+                >
+                  Add
+                </button>
+              </div>
+            )}
           </div>
 
+          {/* RIGHT SECTION — GROCERY LIST */}
           <div className="flex-1">
             <h2 className="text-2xl font-bold mb-4">
               Grocery List ({groceryList.length})
@@ -139,7 +187,7 @@ export default function RecipeResultsPage() {
             <button
               onClick={handleGenerateRecommendation}
               disabled={isGenerating || groceryList.length === 0}
-              className="w-full py-3 bg-teal-600 text-white rounded-xl"
+              className="w-full py-3 bg-teal-600 text-white rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isGenerating ? "Generating..." : "✨ Generate Recommendation"}
             </button>
