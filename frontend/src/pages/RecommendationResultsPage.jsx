@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormContext } from "../contexts/FormContext";
 import {
@@ -9,7 +9,10 @@ import {
   AlertTriangle,
   Home,
   RefreshCcw,
+  Download,
 } from "lucide-react";
+
+import * as htmlToImage from "html-to-image";
 
 export default function RecommendationResultsPage() {
   const { form } = useFormContext();
@@ -17,11 +20,14 @@ export default function RecommendationResultsPage() {
 
   const recommendation = form.Recommendation;
 
+  // REF for capturing page
+  const pageRef = useRef(null);
+
   if (!recommendation) {
     setTimeout(() => navigate("/"), 0);
     return null;
   }
-  
+
   const {
     recommended_store,
     ingredients,
@@ -30,7 +36,7 @@ export default function RecommendationResultsPage() {
     adjusted_budget,
   } = recommendation;
 
-  const storeNames = ["osave", "dali", "pampanga_market"]; 
+  const storeNames = ["osave", "dali", "pampanga_market"];
 
   const formatPrice = (val) => {
     if (typeof val === "number") {
@@ -41,6 +47,23 @@ export default function RecommendationResultsPage() {
 
   const displayStore = (store) =>
     store?.replace("_", " ").toUpperCase() || "STORE";
+
+  // Download the page as PNG
+  const downloadPNG = () => {
+    if (!pageRef.current) return;
+
+    htmlToImage
+      .toPng(pageRef.current, { quality: 1 })
+      .then((dataUrl) => {
+        const link = document.createElement("a");
+        link.download = "shopping_plan.png";
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch((err) => {
+        console.error("Error generating PNG:", err);
+      });
+  };
 
   let budgetStatus;
   if (within_budget) {
@@ -63,8 +86,12 @@ export default function RecommendationResultsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex justify-center p-4 md:p-8 font-sans pb-24">
+    <div
+      className="min-h-screen bg-gray-50 flex justify-center p-4 md:p-8 font-sans pb-24"
+      ref={pageRef}
+    >
       <div className="w-full max-w-6xl bg-white rounded-[2rem] shadow-xl shadow-gray-200/50 overflow-hidden border border-gray-100">
+        {/* Header Section */}
         <div className="p-8 md:p-10 bg-emerald-900 text-white relative overflow-hidden">
           <Store
             className="absolute right-[-20px] top-[-20px] text-emerald-800 opacity-20"
@@ -96,8 +123,10 @@ export default function RecommendationResultsPage() {
           </div>
         </div>
 
+        {/* Budget Status */}
         <div className="px-8 -mt-6 relative z-20">{budgetStatus}</div>
 
+        {/* Breakdown Table */}
         <div className="p-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
             Detailed Breakdown
@@ -167,6 +196,7 @@ export default function RecommendationResultsPage() {
             </table>
           </div>
 
+          {/* Buttons */}
           <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4">
             <button
               onClick={() => navigate("/")}
@@ -177,11 +207,19 @@ export default function RecommendationResultsPage() {
             </button>
 
             <button
-              onClick={() => navigate("/recipe-results")} 
+              onClick={() => navigate("/recipe-results")}
               className="px-8 py-4 bg-emerald-500 text-white rounded-2xl hover:bg-emerald-600 shadow-lg shadow-emerald-200 transition font-bold flex items-center justify-center gap-2"
             >
               <RefreshCcw size={18} />
               Modify List
+            </button>
+
+            <button
+              onClick={downloadPNG}
+              className="px-8 py-4 bg-blue-500 text-white rounded-2xl hover:bg-blue-600 shadow-lg transition font-bold flex items-center justify-center gap-2"
+            >
+              <Download size={18} />
+              Download PNG
             </button>
           </div>
         </div>
