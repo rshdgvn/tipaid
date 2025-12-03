@@ -30,19 +30,20 @@ export default function RecipeResultsPage() {
 
   const recipe = form.RecipeData;
   const [ingredients, setIngredients] = useState(recipe?.ingredients || []);
-  const [groceryList, setGroceryList] = useState([]);
+  const [groceryList, setGroceryList] = useState(form.GroceryList || []);
 
-  // Budget State & Validation
   const [budget, setBudget] = useState(recipe?.budget || "");
   const [budgetError, setBudgetError] = useState(false);
 
-  // Custom Item State
   const [customLeft, setCustomLeft] = useState({ name: "", quantity: "" });
   const [showCustomLeft, setShowCustomLeft] = useState(false);
 
-  // UI State
   const [isGenerating, setIsGenerating] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    updateForm("GroceryList", groceryList);
+  }, [groceryList, updateForm]);
 
   useEffect(() => {
     if (!recipe) {
@@ -148,8 +149,10 @@ export default function RecipeResultsPage() {
       });
 
       const data = await res.json();
+      console.log(form.budget);
 
       if (res.ok) {
+        updateForm("Budget", parseFloat(budget));
         updateForm("Recommendation", data);
         navigate("/recommendation");
       } else {

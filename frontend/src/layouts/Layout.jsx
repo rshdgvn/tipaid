@@ -6,8 +6,8 @@ export default function Layout({ children }) {
     <div className="min-h-screen bg-white font-sans text-gray-800 flex flex-col">
       <nav className="w-full max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
         <div className="flex items-center cursor-pointer">
-          <img src="tpaid_logo.png" className="h-12 w-12" />
-          <span className="text-xl font-bold text-emerald-900 tracking-tight">
+          <img src="tpaid_logo.png" className="h-7 w-7" />
+          <span className="text-xl font-bold text-emerald-900 tracking-tight ml-1">
             Tipaid
           </span>
         </div>

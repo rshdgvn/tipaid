@@ -51,7 +51,7 @@ export default function RecommendationResultsPage() {
       </div>
     );
   } else {
-    const overAmount = (total_cost || 0) - (adjusted_budget || 0);
+    const overAmount = adjusted_budget;
     budgetStatus = (
       <div className="flex items-center gap-2 text-red-700 bg-red-50 border border-red-100 px-4 py-3 rounded-2xl">
         <AlertTriangle size={20} />

@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, useCallback, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+} from "react";
 
 const FormContext = createContext();
 
@@ -7,10 +13,8 @@ export function FormProvider({ children }) {
     Recipe: "",
     People: "",
     Budget: "",
-    Address: "",
-    AddressLat: null,
-    AddressLng: null,
     RecipeData: null,
+    GroceryList: [], 
   });
 
   const updateForm = useCallback((key, value) => {
@@ -18,8 +22,8 @@ export function FormProvider({ children }) {
   }, []);
 
   useEffect(() => {
-    console.log(form)
-  },[])
+    console.log(form);
+  }, []);
 
   return (
     <FormContext.Provider value={{ form, updateForm }}>

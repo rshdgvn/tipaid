@@ -5,22 +5,25 @@ import SummaryPage from "./pages/SummaryPage";
 import RecipeResultsPage from "./pages/RecipeResultsPage";
 import RecommendationResultsPage from "./pages/RecommendationResultsPage";
 import Layout from "./layouts/Layout";
+import { FormProvider } from "./contexts/FormContext.jsx";
 
 export default function App() {
   return (
-    <Layout>
-      <Router>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/form" element={<FormPage />} />
-          <Route path="/summary" element={<SummaryPage />} />
-          <Route path="/recipe-results" element={<RecipeResultsPage />} />
-          <Route
-            path="/recommendation"
-            element={<RecommendationResultsPage />}
-          />
-        </Routes>
-      </Router>
-    </Layout>
+    <FormProvider>
+      <Layout>
+        <Router>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/form" element={<FormPage />} />
+            <Route path="/summary" element={<SummaryPage />} />
+            <Route path="/recipe-results" element={<RecipeResultsPage />} />
+            <Route
+              path="/recommendation"
+              element={<RecommendationResultsPage />}
+            />
+          </Routes>
+        </Router>
+      </Layout>
+    </FormProvider>
   );
 }
