@@ -77,4 +77,6 @@ def read_csv(store):
 def check_loaded(csv):
     if csv is None or len(csv) == 0:
         return Response({"error": f"{csv} CSV not loaded or empty."}, status=500)
+    else:
+        print(f"csv is loaded")
     
