@@ -150,16 +150,13 @@ def get_prices_from_ai(name):
     consistent, normalized, non-null prices.
     """
 
-    stores = ["OSAVE", "Dali Supermarket", "Pampanga Market"]
-    prices = {}
+    prices = {
+        "osave": ai_webscrape_price("OSAVE", name),
+        "dali": ai_webscrape_price("Dali Supermarket", name),
+        "pampanga_market": ai_webscrape_price("Pampanga Market", name)
+    }
 
-    for store in stores:
-        price = ai_webscrape_price(store, name)
-        prices[store.lower().replace(" ", "_")] = price
-
-    # -----------------------------------------------
-    #   FALLBACK : AI Estimated Prices
-    # -----------------------------------------------
+    # Fallback if any price is missing
     missing_any = any(p is None for p in prices.values())
     if missing_any:
         prompt = f"""
@@ -170,14 +167,6 @@ def get_prices_from_ai(name):
 
         Ingredient: "{name}"
 
-        Use:
-        - DA price watch bulletins
-        - Public market reports
-        - Facebook marketplace listings
-        - Kapampangan local market trends
-        - Fresh produce daily price patterns
-        - Grocery pricing behavior
-
         Return STRICT JSON:
         {{
           "osave": <number>,
@@ -185,7 +174,6 @@ def get_prices_from_ai(name):
           "pampanga_market": <number>
         }}
         """
-
         ai_result = generate(prompt)
         if ai_result.get("success"):
             fb = ai_result["recommendation"]
@@ -193,9 +181,7 @@ def get_prices_from_ai(name):
                 if prices[store_key] is None:
                     prices[store_key] = fb.get(store_key)
 
-    # -----------------------------------------------
-    #   NORMALIZE ALL PRICES
-    # -----------------------------------------------
+    # Normalize all prices
     for store_key in prices:
         prices[store_key] = normalize_price(prices[store_key])
 
