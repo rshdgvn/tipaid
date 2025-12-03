@@ -6,8 +6,8 @@ from ..utils.generate import generate, check_loaded, ai_webscrape_price, get_pri
 @api_view(["POST"])
 def generate_recommendation(request):
     """
-    Recommend stores and prices for ingredients.
-    Uses AI web-scraping + fallback estimation.
+    Recommend stores and prices for user-provided ingredients.
+    If an ingredient is missing from datasets, AI estimates its price.
     """
 
     people = request.data.get("people", 1)
@@ -26,71 +26,83 @@ def generate_recommendation(request):
     except:
         return Response({"error": "Budget must be a number."}, status=400)
 
-    # Validate ingredients list
+    # Validate ingredients
     if not isinstance(ingredients_list, list):
         return Response({"error": "Ingredients must be a list."}, status=400)
 
     result = []
     store_counts = {"osave": 0, "dali": 0, "pampanga_market": 0}
-    total_cost = 0
+    total_cost = 0.0
+    total_per_store = {"osave": 0.0, "dali": 0.0, "pampanga_market": 0.0}
 
-    # To compute totals per store
-    store_totals = {"osave": 0, "dali": 0, "pampanga_market": 0}
-
-    # Process each ingredient
     for ingredient in ingredients_list:
         if not isinstance(ingredient, dict):
             continue
-
         name = ingredient.get("name")
         quantity = ingredient.get("quantity", "")
-
         if not name:
             continue
 
-        # Fetch all real-time prices from AI
-        prices = get_prices_from_ai(name,quantity)
-        print(prices)
+        # Generate AI prices
+        prompt = f"""
+        You are an assistant that provides estimated prices for ingredients in Philippine stores.
+        Give prices for the ingredient "{name}" with quantity of "{quantity}" in OSAVE, DALI, and Local Markets in Pampanga in PHP.
+        Return JSON only: {{"osave": price1, "dali": price2, "pampanga_market": price3}}
+        """
+        ai_response = generate(prompt)
+        print(ai_response)
 
-        # Determine cheapest store for this ingredient
-        cheapest_store = min(
-            (store for store, price in prices.items() if price is not None),
-            key=lambda store: prices[store],
-            default=None
-        )
+        if ai_response.get("success"):
+            ai_prices = ai_response.get("recommendation", {})
+            osave_price = ai_prices.get("osave")
+            dali_price  = ai_prices.get("dali")
+            local_market_price = ai_prices.get("pampanga_market")
 
-        cheapest_price = prices.get(cheapest_store)
+            prices = {
+                "osave": osave_price,
+                "dali": dali_price,
+                "pampanga_market": local_market_price
+            }
 
-        if cheapest_store and cheapest_price is not None:
-            store_counts[cheapest_store] += 1
-            total_cost += cheapest_price
-            store_totals[cheapest_store] += cheapest_price
+            # Find cheapest store
+            cheapest_store = min(
+                (k for k, v in prices.items() if v is not None),
+                key=lambda k: prices[k],
+                default=None
+            )
+            cheapest_price = prices.get(cheapest_store) if cheapest_store else None
 
-        result.append({
-            "name": name,
-            "quantity": quantity,
-            "prices": prices,
-            "cheapest_store": cheapest_store,
-            "cheapest_price": cheapest_price
-        })
+            if cheapest_store and cheapest_price is not None:
+                store_counts[cheapest_store] += 1
+                total_cost += cheapest_price
+                total_per_store[cheapest_store] += cheapest_price
 
-    # Determine best recommended store
+            result.append({
+                "name": name,
+                "quantity": quantity,
+                "prices": prices,
+                "cheapest_store": cheapest_store,
+                "cheapest_price": cheapest_price
+            })
+
+    # Determine recommended store
     max_count = max(store_counts.values())
     candidates = [s for s, c in store_counts.items() if c == max_count]
-
     if len(candidates) > 1:
-        recommended_store = min(candidates, key=lambda s: store_totals[s])
+        # Pick the store with lowest total
+        candidate_totals = {s: total_per_store[s] for s in candidates}
+        recommended_store = min(candidate_totals, key=candidate_totals.get)
     else:
-        recommended_store = candidates[0]
+        recommended_store = candidates[0] if candidates else None
 
-    within_budget = (budget is None or total_cost <= budget)
+    within_budget = True if (budget is None or total_cost <= budget) else False
     adjusted_budget = None if within_budget else total_cost
 
     return Response({
         "recommended_store": recommended_store,
         "ingredients": result,
         "total_cost": total_cost,
-        "total_per_store": store_totals,
+        "total_per_store": total_per_store,
         "within_budget": within_budget,
         "adjusted_budget": adjusted_budget
     })
