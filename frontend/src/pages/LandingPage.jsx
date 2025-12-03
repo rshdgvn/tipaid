@@ -1,24 +1,76 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { FormView } from "../components/FormView";
+import { useFormContext } from "../contexts/FormContext";
+import { API_URL } from "../utils/config";
+import Layout from "../layouts/Layout";
 
-function LandingPage() {
-  const nav = useNavigate();
+export default function LandingPage() {
+  const { form, updateForm } = useFormContext();
+  const navigate = useNavigate();
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const isButtonDisabled = useMemo(() => !form.Recipe, [form.Recipe]);
+
+  const handleSubmit = async () => {
+    if (isSubmitting || !form.Recipe) return;
+
+    setIsSubmitting(true);
+
+    const payload = {
+      dish: form.Recipe,
+      people: form.People,
+      budget: form.Budget,
+      address: form.Address,
+      lat: form.AddressLat,
+      lng: form.AddressLng,
+    };
+
+    try {
+      const res = await fetch(`${API_URL}generate/ingredients/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Unknown backend error");
+        setIsSubmitting(false);
+        return;
+      }
+
+      updateForm("RecipeData", {
+        dish: form.Recipe,
+        people: form.People,
+        budget: form.Budget,
+        ingredients: data.ingredients,
+      });
+
+      navigate("/recipe-results");
+    } catch (error) {
+      console.error(error);
+      alert("Failed to connect to backend");
+    }
+
+    setIsSubmitting(false);
+  };
+
+  const handlePopularClick = (dish) => {
+    updateForm("Recipe", dish);
+  };
 
   return (
-    <div className="h-screen flex flex-col justify-center items-center text-center">
-      <h1 className="text-4xl font-bold mb-4">Welcome to TipAid</h1>
-      <p className="text-gray-600 mb-6">
-        Your AI-powered cooking & budgeting helper
-      </p>
-
-      <button
-        onClick={() => nav('/form')}
-        className="px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition text-lg"
-      >
-        Start Cooking Plan
-      </button>
-    </div>
+    <Layout>
+      <FormView
+        form={form}
+        updateForm={updateForm}
+        handleSubmit={handleSubmit}
+        handlePopularClick={handlePopularClick}
+        isButtonDisabled={isButtonDisabled}
+        isSubmitting={isSubmitting}
+      />
+    </Layout>
   );
 }
-
-export default LandingPage;
