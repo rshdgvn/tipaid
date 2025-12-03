@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useCallback } from "react";
 
 const FormContext = createContext();
 
@@ -8,11 +8,13 @@ export function FormProvider({ children }) {
     People: "",
     Budget: "",
     Address: "",
+    AddressLat: null,
+    AddressLng: null,
   });
 
-  const updateForm = (key, value) => {
+  const updateForm = useCallback((key, value) => {
     setForm((prev) => ({ ...prev, [key]: value }));
-  };
+  }, []);
 
   return (
     <FormContext.Provider value={{ form, updateForm }}>

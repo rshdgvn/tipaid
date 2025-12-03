@@ -6,7 +6,6 @@ export default function SummaryPage() {
   const { form } = useFormContext();
   const navigate = useNavigate();
 
-  // List of fields to display
   const dataPoints = [
     { label: "Recipe for", value: form.Recipe },
     { label: "Number of People", value: form.People, unit: "people" },
@@ -16,7 +15,6 @@ export default function SummaryPage() {
     { label: "Longitude", value: form.AddressLng, unit: "°" },
   ];
 
-  // Fallback if the user navigates directly or data is cleared
   if (!form.Recipe && !form.Address) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gray-100">
@@ -36,9 +34,43 @@ export default function SummaryPage() {
     );
   }
 
+  // 🔥 Handle backend submit
+  const handleSubmit = async () => {
+    const payload = {
+      dish: form.Recipe,
+      people: form.People,
+    };
+
+    console.log("📤 Sending to Django backend:", payload);
+
+    try {
+      const res = await fetch(
+        "http://127.0.0.1:8000/api/generate/ingredients/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      const data = await res.json();
+      console.log("📥 Backend response:", data);
+
+      if (res.ok) {
+        navigate("/recipe-results", { state: { recipeData: data } });
+      } else {
+        alert("Error: " + (data.error || "Unknown backend error"));
+      }
+    } catch (error) {
+      console.error("Backend error:", error);
+      alert("Failed to connect to backend");
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4 font-sans">
-      {/* Main Card */}
       <div className="w-full max-w-xl bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
         <div className="h-2 w-full bg-teal-500"></div>
 
@@ -50,7 +82,6 @@ export default function SummaryPage() {
           <dl className="space-y-5">
             {dataPoints.map(
               (item, index) =>
-                // Only render if a value exists
                 item.value && (
                   <div key={index} className="flex flex-col">
                     <dt className="text-sm font-semibold text-gray-600 uppercase tracking-wider">
@@ -72,7 +103,6 @@ export default function SummaryPage() {
             )}
           </dl>
 
-          {/* Action Buttons */}
           <div className="mt-6 flex justify-between gap-4">
             <button
               onClick={() => navigate("/form")}
@@ -80,10 +110,9 @@ export default function SummaryPage() {
             >
               Edit Details
             </button>
+
             <button
-              onClick={() =>
-                alert("Submission Confirmed! Data sent to backend.")
-              }
+              onClick={handleSubmit}
               className="flex-1 py-3 bg-teal-600 text-white font-semibold rounded-xl hover:bg-teal-700 transition-colors shadow-md active:scale-95"
             >
               Confirm Submission
