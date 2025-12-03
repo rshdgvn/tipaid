@@ -4,12 +4,13 @@ import RecipeResultsPage from "./pages/RecipeResultsPage";
 import RecommendationResultsPage from "./pages/RecommendationResultsPage";
 import Layout from "./layouts/Layout";
 import { FormProvider } from "./contexts/FormContext.jsx";
+import HowItWorksPage from "./pages/HowItWorksPage.jsx";
 
 export default function App() {
   return (
     <FormProvider>
-      <Layout>
-        <Router>
+      <Router>
+        <Layout>
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/recipe-results" element={<RecipeResultsPage />} />
@@ -18,8 +19,8 @@ export default function App() {
               element={<RecommendationResultsPage />}
             />
           </Routes>
-        </Router>
-      </Layout>
+        </Layout>
+      </Router>
     </FormProvider>
   );
 }
