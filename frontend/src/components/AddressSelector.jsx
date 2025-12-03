@@ -41,8 +41,15 @@ function LocationMarker({ location, setLocation }) {
 
       try {
         const res = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=en`
+          `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`,
+          {
+            headers: {
+              "User-Agent": "Tipaid (http://localhost:5173/)",
+              Referer: window.location.origin,
+            },
+          }
         );
+
         const data = await res.json();
 
         // Strict API Check: Is it actually Philippines?
