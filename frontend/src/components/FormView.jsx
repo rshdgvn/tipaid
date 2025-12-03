@@ -6,20 +6,18 @@ export const FormView = ({
   handleSubmit,
   handlePopularClick,
   isButtonDisabled,
-  isSubmitting
+  isSubmitting,
 }) => (
   <div className="flex-1 flex flex-col items-center justify-center px-4 pb-24 mt-8">
-    {/* AI Badge */}
-    <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold uppercase tracking-wide mb-8 gap-1">
+    <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold uppercase tracking-wide mb-8 gap-1">
       <SparklesIcon size={14} />
-      AI-Powered Cooking Assistant
+      AI Grocery & Meal Assistant
     </div>
 
-    {/* Header */}
     <h1 className="text-5xl md:text-6xl font-extrabold text-center leading-tight mb-4 text-gray-900">
-      Discover what to cook,
+      Decide what to eat,
       <br />
-      <span className="text-emerald-500">instantly powered by AI</span>
+      Find the best store with <span className="text-emerald-500">Tipaid</span>
     </h1>
 
     <p className="text-gray-500 text-center text-lg max-w-xl mb-12">
@@ -27,9 +25,7 @@ export const FormView = ({
       ingredients and help you shop smarter.
     </p>
 
-    {/* FORM */}
     <div className="w-full max-w-3xl flex flex-col gap-4">
-      {/* Dish Input */}
       <div className="relative group">
         <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
           <SearchIcon className="text-gray-400" />
@@ -52,7 +48,6 @@ export const FormView = ({
       </div>
 
       <div className="flex flex-col md:flex-row gap-4">
-        {/* People Input */}
         <div className="relative flex-1">
           <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
             <UserIcon className="text-gray-400" />
@@ -74,7 +69,6 @@ export const FormView = ({
           />
         </div>
 
-        {/* AI Submit Button */}
         <button
           onClick={handleSubmit}
           disabled={isButtonDisabled}
@@ -88,7 +82,6 @@ export const FormView = ({
             }
           `}
         >
-          {/* AI Generating State */}
           {isSubmitting ? (
             <>
               <Loader2 className="animate-spin text-white/80" />
@@ -104,7 +97,6 @@ export const FormView = ({
       </div>
     </div>
 
-    {/* Popular Dishes */}
     <div className="mt-12 text-center">
       <p className="text-gray-500 text-sm mb-4">Try a popular dish:</p>
 

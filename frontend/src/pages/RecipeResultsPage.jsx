@@ -13,8 +13,7 @@ import {
   Utensils,
   Coins,
 } from "lucide-react";
-
-const API_URL = `${import.meta.env.VITE_API_URL}generate/`;
+import { API_URL } from "../utils/config";
 
 export default function RecipeResultsPage() {
   const { form, updateForm } = useFormContext();
@@ -23,37 +22,20 @@ export default function RecipeResultsPage() {
   const recipe = form.RecipeData;
 
   const [ingredients, setIngredients] = useState(recipe?.ingredients || []);
+
   const [groceryList, setGroceryList] = useState([]);
+
+  const [budget, setBudget] = useState(recipe?.budget || "");
+
   const [customLeft, setCustomLeft] = useState({ name: "", quantity: "" });
   const [showCustomLeft, setShowCustomLeft] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
 
-  // --- 1. Empty State (Redirect if no data) ---
   if (!recipe) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20">
-        <div className="bg-emerald-50 p-8 rounded-3xl flex flex-col items-center text-center max-w-md animate-in fade-in zoom-in duration-300">
-          <div className="bg-white p-4 rounded-full shadow-sm mb-4">
-            <ShoppingBasket size={32} className="text-emerald-600" />
-          </div>
-          <h2 className="text-2xl font-extrabold text-gray-900 mb-2">
-            No Recipe Loaded
-          </h2>
-          <p className="text-gray-500 mb-6">
-            We couldn't find the recipe details. Please try searching again.
-          </p>
-          <button
-            onClick={() => navigate("/")}
-            className="px-8 py-3 bg-emerald-500 text-white font-bold rounded-2xl hover:bg-emerald-600 transition-all shadow-emerald-200 hover:shadow-emerald-300"
-          >
-            Go Home
-          </button>
-        </div>
-      </div>
-    );
+    setTimeout(() => navigate("/"), 0);
+    return null;
   }
 
-  // --- 2. Logic Handlers ---
   const addItemToGrocery = (item) => {
     if (groceryList.some((g) => g.name === item.name)) return;
     setGroceryList((prev) => [...prev, item]);
@@ -70,17 +52,26 @@ export default function RecipeResultsPage() {
   };
 
   const handleGenerateRecommendation = async () => {
-    if (groceryList.length === 0) return;
+    if (groceryList.length === 0) {
+      alert("Please add at least one item to your basket.");
+      return;
+    }
 
     setIsGenerating(true);
+
+    const formattedBudget =
+      budget && !isNaN(budget) ? parseFloat(budget) : null;
+
     const payload = {
       people: recipe.people,
-      budget: recipe.budget,
+      budget: formattedBudget, 
       ingredients: groceryList,
     };
 
+    console.log("Sending Payload:", payload);
+
     try {
-      const res = await fetch(API_URL, {
+      const res = await fetch(`${API_URL}generate/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -92,11 +83,10 @@ export default function RecipeResultsPage() {
         updateForm("Recommendation", data);
         navigate("/recommendation");
       } else {
-        alert("Error generating recommendation");
+        alert(data.error || "Error generating recommendation");
       }
     } catch (error) {
       console.error(error);
-      alert("Network error");
     } finally {
       setIsGenerating(false);
     }
@@ -104,7 +94,6 @@ export default function RecipeResultsPage() {
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 md:px-6 pb-24">
-      {/* --- Header Section --- */}
       <div className="mt-8 mb-10 animate-in slide-in-from-top-4 duration-500">
         <button
           onClick={() => navigate("/")}
@@ -118,7 +107,6 @@ export default function RecipeResultsPage() {
 
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
-            {/* Design match: Same badge style as FormView */}
             <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold uppercase tracking-wide mb-4 gap-1">
               <ChefHat size={14} />
               Recipe Found
@@ -133,18 +121,11 @@ export default function RecipeResultsPage() {
               <Utensils size={18} className="text-emerald-500" />
               {recipe.people} People
             </div>
-            {recipe.budget && (
-              <div className="flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 rounded-2xl shadow-sm text-sm font-bold text-gray-700">
-                <Coins size={18} className="text-emerald-500" />₱{recipe.budget}
-              </div>
-            )}
           </div>
         </div>
       </div>
 
-      {/* --- Main Content Grid --- */}
       <div className="grid lg:grid-cols-2 gap-8 items-start">
-        {/* --- LEFT: Ingredients Source --- */}
         <div className="bg-white rounded-3xl border border-gray-200 shadow-xl shadow-gray-200/40 overflow-hidden animate-in slide-in-from-left-4 duration-500 delay-100">
           <div className="p-6 md:p-8 border-b border-gray-100 bg-gray-50/50">
             <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
@@ -208,7 +189,6 @@ export default function RecipeResultsPage() {
               );
             })}
 
-            {/* Custom Ingredient Toggle */}
             {!showCustomLeft ? (
               <button
                 onClick={() => setShowCustomLeft(true)}
@@ -259,10 +239,9 @@ export default function RecipeResultsPage() {
           </div>
         </div>
 
-        {/* --- RIGHT: Grocery Basket --- */}
         <div className="bg-emerald-900/5 rounded-3xl border border-emerald-100/50 shadow-xl shadow-emerald-100/20 flex flex-col h-full sticky top-8 animate-in slide-in-from-right-4 duration-500 delay-200">
           <div className="p-6 md:p-8 border-b border-emerald-100/50">
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between mb-4">
               <h2 className="text-2xl font-bold text-emerald-950 flex items-center gap-3">
                 <div className="p-2 bg-emerald-100 text-emerald-600 rounded-lg">
                   <ShoppingBasket size={20} />
@@ -273,9 +252,24 @@ export default function RecipeResultsPage() {
                 {groceryList.length} Items
               </span>
             </div>
-            <p className="text-emerald-800/70 text-sm pl-1">
-              Review your list before generating prices.
-            </p>
+
+            <div className="bg-white p-3 rounded-2xl border border-emerald-200 shadow-sm flex items-center gap-3">
+              <div className="bg-emerald-100 p-2 rounded-xl text-emerald-600">
+                <Coins size={20} />
+              </div>
+              <div className="flex-1">
+                <p className="text-xs font-bold text-emerald-800 uppercase tracking-wide">
+                  Target Budget
+                </p>
+                <input
+                  type="number"
+                  placeholder="Set limit (Optional)"
+                  value={budget}
+                  onChange={(e) => setBudget(e.target.value)}
+                  className="w-full bg-transparent font-bold text-gray-800 placeholder-gray-400 focus:outline-none"
+                />
+              </div>
+            </div>
           </div>
 
           <div className="flex-1 p-6 md:p-8">
@@ -321,7 +315,6 @@ export default function RecipeResultsPage() {
             )}
           </div>
 
-          {/* Action Footer */}
           <div className="p-6 md:p-8 bg-white/60 backdrop-blur-sm border-t border-emerald-100 rounded-b-3xl">
             <button
               onClick={handleGenerateRecommendation}
