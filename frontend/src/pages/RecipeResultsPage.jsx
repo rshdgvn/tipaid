@@ -64,7 +64,7 @@ export default function RecipeResultsPage() {
 
     const payload = {
       people: recipe.people,
-      budget: formattedBudget, 
+      budget: formattedBudget,
       ingredients: groceryList,
     };
 
@@ -217,7 +217,7 @@ export default function RecipeResultsPage() {
                           quantity: e.target.value,
                         })
                       }
-                      placeholder="Qty"
+                      placeholder="Quantity (e.g., 500 g)"
                       className="flex-1 px-4 py-4 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all font-medium"
                     />
                     <button
