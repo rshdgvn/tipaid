@@ -1,25 +1,21 @@
-FROM python:3.12-slim
+# Use lightweight Python image
+FROM python:3.12-alpine
 
-ENV PYTHONUNBUFFERED=1
+# Prevent Python from buffering stdout/stderr
+ENV PYTHONUNBUFFERED 1
 
+# Set working directory
 WORKDIR /django
 
-# Install build tools and dependencies for scientific packages
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    python3-dev \
-    gfortran \
-    dos2unix \
-    && rm -rf /var/lib/apt/lists/*
+# Copy requirements and install
+COPY requirements.txt requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install Python dependencies
-COPY requirements.txt .
-RUN pip install --upgrade pip && pip install -r requirements.txt
-
-# Copy project files
+# Copy project code
 COPY . .
 
-# Normalize line endings & make script executable
-RUN dos2unix ./start.sh && chmod +x ./start.sh
-
+# Expose the port the Django app will run on
 EXPOSE 8000
+
+# Run database migrations and start the server
+CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver"]
