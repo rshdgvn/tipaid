@@ -1,0 +1,78 @@
+Category,Brand,Product,Weight,Price
+Beverages,Camel,Camel Red,N/A,8.0
+Beverages,Milo,Milo Active Go 24g,24g,9.0
+Beverages,Tang,Tang Dalandan Litro 20g,20g,21.0
+Beverages,Tang,Tang Orange 20g,20g,21.0
+Beverages,Nestea,Nestea 24g,24g,25.0
+Candy & Sweets,Fres,Fres Mint Candy,N/A,1.0
+Candy & Sweets,Fres,VFresh,N/A,1.0
+Candy & Sweets,Lion,Lion Tiger Regular,N/A,3.0
+Candy & Sweets,Speed,Speed Bar 380g (Divide 4 = 96g),380g,7.0
+Candy & Sweets,Pride,Pride Cut Bar Blue 100g,100g,8.0
+Canned Goods,Lucky,Lucky 7 Sardines Red,N/A,24.0
+Canned Goods,Family,Family Sardines Red 155g,155g,25.0
+Canned Goods,Swan,Swan Sardines Red 155g,155g,25.0
+Canned Goods,Virginia,Virginia Pork n Beans,N/A,25.0
+Canned Goods,Fres,Fresca Tuna Afritada 175g,175g,30.0
+Canned Goods,Argentina,Argentina Corned Beef 150g,150g,39.0
+Canned Goods,Century,Century Tuna Flakes n Oil 155g,155g,40.0
+Canned Goods,Holiday,Holiday Corned Beef 160g,160g,43.0
+Canned Goods,PF Star,PF Star Corned Beef,N/A,43.0
+Cheese,Nova,Nova Cheddar 40g,40g,15.0
+Cheese,Nova,Nova Cheddar 78g,8g,36.0
+Cigarettes & Tobacco,Chesterfield,Chesterfield White,N/A,5.0
+Cigarettes & Tobacco,Malboro,Malboro Blast,N/A,8.0
+Coffee,Kopiko,Kopiko Black Twin,N/A,14.0
+Coffee,Kopiko,Kopiko Blanca Twin,N/A,14.0
+Coffee,Kopiko,Kopiko Brown Twin 55g,55g,14.0
+Coffee,Nescafe,Nescafe Creamy White 28g,28g,14.0
+Coffee,Nescafe,Nescafe Original Twin 56g,56g,14.0
+Cooking Oil,Lipid,Oil 1/2 Lipid,N/A,15.0
+Cooking Oil,Lipid,Oil 1 Lipid,N/A,30.0
+Dairy Products,OSAVE House Brand,Egg,N/A,8.0
+Instant Noodles,Lucky,Lucky Me Noodles Chicken 55g,55g,10.0
+Instant Noodles,Lucky,Lucky Me Pancit Canton Chilimansi,N/A,13.0
+Instant Noodles,Lucky,Lucky Me Pancit Canton Hot&Spicy,N/A,13.0
+Instant Noodles,Lucky,Lucky Me Pancit Canton Kalamansi 60g,60g,13.0
+Instant Noodles,Lucky,Lucky Me Pancit Canton Original 60g,60g,13.0
+Instant Noodles,Lucky,Lucky Me Pancit Canton Sweet&Spicy 60g,60g,13.0
+Legumes,Monggo,Monggo 70 per kilo,N/A,10.0
+Meat Products,Winner,Winner Beef Loaf 150g,150g,23.0
+Meat Products,Argentina,Argentina Beef Loaf 150g,150g,25.0
+Powdered Milk,Birch Tree,Birch Tree Milk,N/A,10.0
+Rice & Grains,Lucky,Lucky BT Rice,N/A,44.0
+Seasonings & Sauces,Magic Sarap,Magic Sarap 8g,8g,5.0
+Seasonings & Sauces,Papa,Papa Banana Catsup 25g,25g,5.0
+Seasonings & Sauces,Knorr,Knorr Beef 10g,10g,7.0
+Seasonings & Sauces,Knorr,Knorr Cubes Chicken 10g,10g,7.0
+Seasonings & Sauces,Knorr,Knorr Pork Cubes 10g,10g,7.0
+Seasonings & Sauces,Knorr,Knorr Shrimp 10g,10g,8.0
+Seasonings & Sauces,Knorr,Knorr Sinigang Sampalok,N/A,8.0
+Seasonings & Sauces,Silver Swan,Silver Swan Soy Sauce 100ml,100ml,8.0
+Seasonings & Sauces,Ceres,Ceres Tawas 25g,25g,10.0
+Seasonings & Sauces,Silver Swan,Silver Swan Soy Sauce 200ml,200ml,15.0
+Snacks & Condiments,M.Y. San,M.Y. San Skyflakes,N/A,7.0
+Snacks & Condiments,Magic Flakes,Magic Flakes Plain 28g,28g,7.0
+Snacks & Condiments,Oishi,Oishi Boogeyman Crunch 24g,24g,8.0
+Snacks & Condiments,Oishi,Oishi Crispy Patata 24g,24g,8.0
+Snacks & Condiments,Oishi,Oishi Fish Cracker 24g,24g,8.0
+Snacks & Condiments,Oishi,Oishi Martys Spicy,N/A,8.0
+Snacks & Condiments,Oishi,Oishi Onion Rings,N/A,8.0
+Snacks & Condiments,Rinbee,Rinbee Cheese Stick 24g,24g,8.0
+Snacks & Condiments,Wafrets,Wafrets Brix Cheese 24g,24g,8.0
+Snacks & Condiments,Choco Mucho,Choco Mucho Biscuit Choco Filling,N/A,9.0
+Snacks & Condiments,Energen,Energen Pandesal Mate 30g,30g,9.0
+Snacks & Condiments,Rebisco,Rebisco Doowee Strawberry,N/A,10.0
+Snacks & Condiments,Tattoos,Tattoos Corn Tube Pizza,N/A,10.0
+Snacks & Condiments,Tattoos,Tattoos Tube 60g,60g,10.0
+Snacks & Condiments,Aloha,Aloha Mini Sando Bag,N/A,13.0
+Snacks & Condiments,OSAVE House Brand,Cal Cheese Wafer 48g,48g,13.0
+Snacks & Condiments,Piattos,Piattos Cheese 40g,40g,15.0
+Snacks & Condiments,Crispy Fry,Crispy Fry Regular 62g,62g,18.0
+Snacks & Condiments,Oishi,Oishi Prawn Extrahot 60g,60g,18.0
+Snacks & Condiments,Crispy Fry,Crispy Fry Spicy 62g,62g,20.0
+Snacks & Condiments,Oishi,Oishi Crispy Patata 85g,85g,25.0
+Snacks & Condiments,Piattos,Piattos Roadhouse 85g,85g,35.0
+Sugar & Sweeteners,Local Brand,Sugar 10 PHP,N/A,10.0
+Sugar & Sweeteners,Local Brand,Sugar 1/4,N/A,24.0
+Sugar & Sweeteners,Local Brand,Sugar 1/2,N/A,48.0
