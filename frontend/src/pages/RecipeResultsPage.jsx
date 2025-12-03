@@ -32,7 +32,7 @@ export default function RecipeResultsPage() {
   const [ingredients, setIngredients] = useState(recipe?.ingredients || []);
   const [groceryList, setGroceryList] = useState(form.GroceryList || []);
 
-  const [budget, setBudget] = useState(recipe?.budget || "");
+  const [budget, setBudget] = useState(form?.Budget || "");
   const [budgetError, setBudgetError] = useState(false);
 
   const [customLeft, setCustomLeft] = useState({ name: "", quantity: "" });

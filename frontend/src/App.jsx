@@ -1,29 +1,27 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
-import FormPage from "./pages/FormPage";
-import SummaryPage from "./pages/SummaryPage";
 import RecipeResultsPage from "./pages/RecipeResultsPage";
 import RecommendationResultsPage from "./pages/RecommendationResultsPage";
 import Layout from "./layouts/Layout";
 import { FormProvider } from "./contexts/FormContext.jsx";
+import HowItWorksPage from "./pages/HowItWorksPage.jsx";
 
 export default function App() {
   return (
     <FormProvider>
-      <Layout>
-        <Router>
+      <Router>
+        <Layout>
           <Routes>
             <Route path="/" element={<LandingPage />} />
-            <Route path="/form" element={<FormPage />} />
-            <Route path="/summary" element={<SummaryPage />} />
             <Route path="/recipe-results" element={<RecipeResultsPage />} />
+            <Route path="/works" element={<HowItWorksPage />} />
             <Route
               path="/recommendation"
               element={<RecommendationResultsPage />}
             />
           </Routes>
-        </Router>
-      </Layout>
+        </Layout>
+      </Router>
     </FormProvider>
   );
 }
