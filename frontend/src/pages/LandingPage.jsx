@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { FormView } from "../components/FormView";
 import { useFormContext } from "../contexts/FormContext";
 import { API_URL } from "../utils/config";
-import Layout from "../layouts/Layout";
 
 export default function LandingPage() {
   const { form, updateForm } = useFormContext();
@@ -62,15 +61,13 @@ export default function LandingPage() {
   };
 
   return (
-    <Layout>
-      <FormView
-        form={form}
-        updateForm={updateForm}
-        handleSubmit={handleSubmit}
-        handlePopularClick={handlePopularClick}
-        isButtonDisabled={isButtonDisabled}
-        isSubmitting={isSubmitting}
-      />
-    </Layout>
+    <FormView
+      form={form}
+      updateForm={updateForm}
+      handleSubmit={handleSubmit}
+      handlePopularClick={handlePopularClick}
+      isButtonDisabled={isButtonDisabled}
+      isSubmitting={isSubmitting}
+    />
   );
 }
