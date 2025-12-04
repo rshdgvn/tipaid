@@ -11,9 +11,13 @@ Stop guessing prices—TipAid helps you visualize cost breakdowns, find the best
 We utilize a modern, high-performance stack to deliver real-time calculations and a seamless user experience.
 
 **Component Technology Description Frontend** Dynamic user interface and state management.
+
 **Styling** Responsive, utility-first design system. 
+
 **Backend** Robust API handling and business logic.
+
 **AI Engine** Recipe generation and ingredient analysis.
+
 **Data Processing** Complex price calculations and data manipulation.
 
 ✨ Key Features
